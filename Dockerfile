@@ -1,11 +1,8 @@
-FROM rabbitmq:3.7-management-alpine
+FROM rabbitmq:3.8-management-alpine
 
 RUN apk add --update \
     curl \
-    unzip \
     && rm -rf /var/cache/apk/*
-RUN curl -sf -o rabbitmq_delayed_message_exchange-20171201-3.7.x.zip -L https://dl.bintray.com/rabbitmq/community-plugins/3.7.x/rabbitmq_delayed_message_exchange/rabbitmq_delayed_message_exchange-20171201-3.7.x.zip \
-    && unzip -o rabbitmq_delayed_message_exchange-20171201-3.7.x.zip \
-    && rm rabbitmq_delayed_message_exchange-20171201-3.7.x.zip \
-    && mv rabbitmq_delayed_message_exchange-20171201-3.7.x.ez /opt/rabbitmq/plugins/
+ARG DELAYED_MESSAGE_EXCHANGE_DOWNLOAD_URL="https://github.com/rabbitmq/rabbitmq-delayed-message-exchange/releases/download/3.8.9/rabbitmq_delayed_message_exchange-3.8.9-0199d11c.ez"
+RUN curl -sf -o /opt/rabbitmq/plugins/rabbitmq_delayed_message_exchange-3.8.x.ez -L ${DELAYED_MESSAGE_EXCHANGE_DOWNLOAD_URL}
 RUN rabbitmq-plugins enable --offline rabbitmq_web_stomp rabbitmq_delayed_message_exchange
